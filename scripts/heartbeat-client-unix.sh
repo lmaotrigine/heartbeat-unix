@@ -1,19 +1,19 @@
 #!/usr/bin/env sh
 
-if ! [ -e "$HOME/.env" ]; then
-    echo "$HOME/.env not setup, please create it"
+if ! [ -e "$HOME/.heartbeat" ]; then
+    echo "$HOME/.heartbeat not setup, please create it"
     exit 1
 fi
 
-# shellcheck disable=SC1091
-. "$HOME/.env"
+HEARTBEAT_LOG_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/heartbeat"
+# shellcheck source=/dev/null
+. "$HOME/.heartbeat"
 
-if [ -z "$HEARTBEAT_AUTH" ] || [ -z "$HEARTBEAT_LOG_DIR" ] || [ -z "$HEARTBEAT_HOSTNAME" ] || [ -z "$HEARTBEAT_DEVICE_NAME" ]; then
+if [ -z "$HEARTBEAT_AUTH" ] || [ -z "$HEARTBEAT_HOSTNAME" ]; then
     echo "Environment variables not setup correctly!"
     echo "HEARTBEAT_AUTH: $HEARTBEAT_AUTH"
     echo "HEARTBEAT_LOG_DIR: $HEARTBEAT_LOG_DIR"
     echo "HEARTBEAT_HOSTNAME: $HEARTBEAT_HOSTNAME"
-    echo "HEARTBEAT_DEVICE_NAME: $HEARTBEAT_DEVICE_NAME"
     exit 1
 else
     if [ -z "$(which xprintidle)" ]; then
@@ -31,7 +31,7 @@ else
     if [ "$LAST_INPUT_MS" -lt 120000 ] && [ -z "$SCREEN_LOCKED" ]; then
         {
             echo "$(date +"%Y/%m/%d %T") - Running Heartbeat"
-            curl -s -X POST -H "Auth: $HEARTBEAT_AUTH" -H "Device: $HEARTBEAT_DEVICE_NAME" "$HEARTBEAT_HOSTNAME/api/beat"
+            curl -s -X POST -H "Authorization: $HEARTBEAT_AUTH" -H "$HEARTBEAT_HOSTNAME/api/beat"
             echo ""
         } >> "$HEARTBEAT_LOG_DIR/heartbeat.log" 2>&1
     fi
