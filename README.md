@@ -10,10 +10,10 @@ Do note, that checking for a screen lock only works on KDE's `kscreenlocker`. If
 
 ## Usage (for most \*NIX-like systems)
 
-1. Download the posix shell script, [`heartbeat-client-unix.sh`](https://github.com/5HT2B/heartbeat-unix/blob/master/scripts/heartbeat-client-unix.sh) anywhere you'd like, preferably like so
+1. Download the posix shell script, [`heartbeat-client-unix.sh`](https://github.com/lmaotrigine/heartbeat-unix/blob/master/scripts/heartbeat-client-unix.sh) anywhere you'd like, preferably like so
 ```bash
 mkdir -p ~/.local/bin/
-curl https://raw.githubusercontent.com/5HT2B/heartbeat-unix/master/scripts/heartbeat-client-unix.sh -o ~/.local/bin/heartbeat-client-unix.sh
+curl https://raw.githubusercontent.com/lmaotrigine/heartbeat-unix/master/scripts/heartbeat-client-unix.sh -o ~/.local/bin/heartbeat-client-unix.sh
 chmod +x ~/.local/bin/heartbeat-client-unix.sh
 ```
 
@@ -26,7 +26,6 @@ Next, inside `~/.env`, add the following
 export HEARTBEAT_AUTH='your heartbeat server token'
 export HEARTBEAT_HOSTNAME="https://your.heartbeat.domain"
 export HEARTBEAT_LOG_DIR="$HOME/.cache"
-export HEARTBEAT_DEVICE_NAME="Linux Device"
 ```
 
 3. Download and install the systemd service
@@ -35,8 +34,8 @@ If you are not using systemd on your system, please use the equivalent service f
 
 ```bash
 mkdir -p ~/.config/systemd/user/
-curl https://raw.githubusercontent.com/5HT2B/heartbeat-unix/master/services/heartbeat-client.service -o ~/.config/systemd/user/heartbeat-client.service
-curl https://raw.githubusercontent.com/5HT2B/heartbeat-unix/master/services/heartbeat-client.timer -o ~/.config/systemd/user/heartbeat-client.timer
+curl https://raw.githubusercontent.com/lmaotrigine/heartbeat-unix/master/services/heartbeat-client.service -o ~/.config/systemd/user/heartbeat-client.service
+curl https://raw.githubusercontent.com/lmaotrigine/heartbeat-unix/master/services/heartbeat-client.timer -o ~/.config/systemd/user/heartbeat-client.timer
 # Enable the service and timer for the current user
 systemctl --user enable --now heartbeat-client.timer
 ```
@@ -59,10 +58,10 @@ cat "$HEARTBEAT_LOG_DIR/heartbeat.log"
 
 Since `xprintidle` does not have support for macOS, there is an alternative script available.
 
-1. Download the bash script, [`heartbeat-client-macOS.sh`](https://github.com/5HT2B/heartbeat-unix/blob/master/scripts/heartbeat-client-macOS.sh) anywhere you'd like, preferably like so
+1. Download the bash script, [`heartbeat-client-macOS.sh`](https://github.com/lmaotrigine/heartbeat-unix/blob/master/scripts/heartbeat-client-macOS.sh) anywhere you'd like, preferably like so
 ```bash
 mkdir -p ~/.local/bin/
-curl https://raw.githubusercontent.com/5HT2B/heartbeat-unix/master/scripts/heartbeat-client-macOS.sh -o ~/.local/bin/heartbeat-client-macOS.sh
+curl https://raw.githubusercontent.com/lmaotrigine/heartbeat-unix/master/scripts/heartbeat-client-macOS.sh -o ~/.local/bin/heartbeat-client-macOS.sh
 chmod +x ~/.local/bin/heartbeat-client-macOS.sh
 ```
 
@@ -70,16 +69,15 @@ Feel free to modify this however you'd like. Do note, **you *will* have to updat
 
 2. Setup config
 
-Next, inside `~/.heartbeat`, add the following
+Next, inside `~/.env`, add the following
 ```bash
 export HEARTBEAT_AUTH='your heartbeat server token'
 export HEARTBEAT_HOSTNAME="https://your.heartbeat.domain"
-export HEARTBEAT_LOG_DIR="$HOME/Library/Logs/functional.technically.heartbeat"
-export HEARTBEAT_DEVICE_NAME="MacOS Device"
+export HEARTBEAT_LOG_DIR="$HOME/Library/Logs/net.lmaotrigine.heartbeat"
 ```
 
-3. Copy `functional.technically.heartbeat.plist` to `~/Library/LaunchAgents`.
-4. Run `launchctl load ~/Library/LaunchAgents/functional.technically.heartbeat.plist`.
+3. Copy `net.lmaotrigine.heartbeat.plist` to `~/Library/LaunchAgents`.
+4. Run `launchctl load ~/Library/LaunchAgents/net.lmaotrigine.heartbeat.plist`.
 5. Ensure that the client is setup correctly
 
 To be sure your script is working and got a response from the server, run the following commands (this makes debugging easier + faster, but you could also just watch your heartbeat server's website for an update).
