@@ -1,13 +1,10 @@
 #!/usr/bin/env sh
 
-if ! [ -e "$HOME/.env" ]; then
-    echo "$HOME/.env not setup, please create it"
-    exit 1
-fi
+HEARTBEAT_HOME=${HEARTBEAT_HOME:-$HOME/.heartbeat}
+HEARTBEAT_LOG_DIR=$HEARTBEAT_HOME/logs
 
 # shellcheck source=/dev/null
-. "$HOME/.env"
-HEARTBEAT_LOG_DIR="${HEARTBEAT_LOG_DIR:-$HOME/Library/Logs/net.lmaotrigine.heartbeat}"
+[ -f "$HEARTBEAT_HOME/config" ] && . "$HEARTBEAT_HOME/config"
 
 if [ -z "$HEARTBEAT_AUTH" ] || [ -z "$HEARTBEAT_HOSTNAME" ]; then
     echo "Environment variables not setup correctly!"

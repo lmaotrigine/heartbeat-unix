@@ -1,28 +1,29 @@
 #!/usr/bin/env sh
 
-if ! [ -e "$HOME/.env" ]; then
-    echo "$HOME/.env not setup, please create it"
-    exit 1
-fi
+HEARTBEAT_HOME=${HEARTBEAT_HOME:-$HOME/.heartbeat}
+HEARTBEAT_LOG_DIR="$HEARTBEAT_HOME/logs"
 
-HEARTBEAT_LOG_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/heartbeat"
+[ ! -d "$HEARTBEAT_LOG_DIR" ] && mkdir -p "$HEARTBEAT_LOG_DIR"
+
 # shellcheck source=/dev/null
-. "$HOME/.env"
+[ -f "$HEARTBEAT_HOME/config" ] && . "$HEARTBEAT_HOME/config"
 
-if [ -z "$HEARTBEAT_AUTH" ] || [ -z "$HEARTBEAT_HOSTNAME" ]; then
+if [ -z "$HEARTBEAT_AUTH" ] || [ -z "$HEARTBEAT_HOSTNAME" ] || [ -z "$HEARTBEAT_SCREEN_LOCK" ]; then
     echo "Environment variables not setup correctly!"
     echo "HEARTBEAT_AUTH: $HEARTBEAT_AUTH"
     echo "HEARTBEAT_LOG_DIR: $HEARTBEAT_LOG_DIR"
     echo "HEARTBEAT_HOSTNAME: $HEARTBEAT_HOSTNAME"
+    echo "HEARTBEAT_SCREEN_LOCK: $HEARTBEAT_SCREEN_LOCK"
     exit 1
 else
+    # FIXME: wayland how?
     if [ -z "$(which xprintidle)" ]; then
         echo "xprintidle not found, please install it!"
         exit 1
     fi
 
     # Check if kscreenlocker is running. Only works on KDE
-    SCREEN_LOCKED="$(pgrep kscreenlocker)"
+    SCREEN_LOCKED="$(pgrep "$HEARTBEAT_SCREEN_LOCK")"
     # Check when the last keyboard or mouse event was sent
     LAST_INPUT_MS="$(xprintidle)"
 

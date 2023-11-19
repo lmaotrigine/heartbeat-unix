@@ -4,7 +4,7 @@ Wants=heartbeat-client.timer
 
 [Service]
 Type=oneshot
-ExecStart=%h/.local/bin/heartbeat-client-unix.sh
+ExecStart=%h/.heartbeat/bin/heartbeat
 
 [Install]
 WantedBy=multi-user.target 
